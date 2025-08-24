@@ -1,0 +1,5 @@
+{
+  "name": "pop scren of Toolq Conten 1.1.1",
+  "description": "A comprehensive web application to generate, manage, and enhance video and image content using Google's Veo, Imagen, and Gemini AI models. Features include a powerful media generator, an image studio for analysis and upscaling, and a prompt helper to craft the perfect input.",
+  "requestFramePermissions": []
+}

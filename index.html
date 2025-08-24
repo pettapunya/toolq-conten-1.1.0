@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toolq Conten</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              'background': '#0D1117', // Very dark, slightly blue navy
+              'surface': '#161B22', // Darker gray-blue for cards/surfaces
+              'primary': '#C9378C', // Bright magenta/pink
+              'secondary': '#22D3EE', // Bright cyan
+              'accent': '#8B5CF6', // Violet for gradients
+              'brand-green': '#10B981', // A vibrant green for highlights and buttons
+              'text-main': '#E6EDF3', // Off-white for main text
+              'text-secondary': '#8D96A0', // Gray for secondary text
+              'border': '#30363D', // Border color
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.1/",
+    "react/": "https://esm.sh/react@^19.1.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.15.0",
+    "openai": "https://esm.sh/openai@^4.52.7",
+    "marked": "https://esm.sh/marked@^13.0.2"
+  }
+}
+</script>
+</head>
+  <body class="bg-background text-text-main font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+
+    <!-- ===== Toolq Conten BUY POP SCREEN ===== -->
+    <style>
+      :root{
+        --bg:#070A0F; --text:#E7EAF0; --muted:#9AA4B2;
+        --card:#0E1420; --card2:#0B111A;
+        --accent1:#7C3AED; --accent2:#EC4899;
+        --shadow:0 30px 80px -30px rgba(0,0,0,.6);
+        --radius:20px;
+      }
+      .tc-font{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+      .tc-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(6px); z-index:9998; display:none}
+      .tc-modal{position:fixed; inset:0; z-index:9999; display:none; place-items:center; padding:20px}
+      .tc-open{display:grid}
+      .tc-card{
+        width:min(900px,94vw); background:
+          linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+          radial-gradient(1200px 600px at 100% -200px, rgba(124,58,237,.15), transparent 50%),
+          radial-gradient(1000px 500px at -200px 100%, rgba(236,72,153,.12), transparent 60%),
+          var(--card);
+        border:1px solid rgba(255,255,255,.08);
+        color:var(--text); border-radius:var(--radius); box-shadow:var(--shadow); padding:28px;
+      }
+      .tc-top{display:flex; align-items:center; justify-content:space-between}
+      .tc-badge{padding:.35rem .6rem; border-radius:999px; font-size:.8rem; background:rgba(124,58,237,.18); color:#C4B5FD; border:1px solid rgba(124,58,237,.35)}
+      .tc-x{all:unset; cursor:pointer; color:var(--muted); font-weight:800}
+      .tc-x:hover{color:var(--text)}
+      .tc-grid{display:grid; gap:18px; margin-top:16px}
+      @media(min-width:860px){ .tc-grid{grid-template-columns:1.4fr .9fr} }
+      .tc-title{font-size:2rem; font-weight:800}
+      .tc-sub{color:var(--muted)}
+      .tc-price{margin:8px 0; display:flex; align-items:baseline; gap:.6rem}
+      .tc-old{text-decoration:line-through; color:#7A8696; font-weight:700}
+      .tc-new{font-size:2.2rem; font-weight:900}
+      .tc-note{color:var(--muted); font-size:.9rem}
+      .tc-list{margin-top:12px; list-style:none; display:grid; gap:10px; padding:0}
+      .tc-li{display:flex; gap:.6rem; align-items:flex-start}
+      .tc-dot{width:9px; height:9px; margin-top:.45rem; border-radius:2px; background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+      .tc-cta{margin-top:14px; display:flex; gap:10px; flex-wrap:wrap}
+      .tc-btn{padding:1rem 1.1rem; border-radius:14px; font-weight:800; border:1px solid transparent; cursor:pointer; transition:.2s; text-decoration:none}
+      .tc-primary{background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white}
+      .tc-primary:hover{filter:brightness(1.07)}
+      .tc-ghost{background:transparent; color:var(--text); border:1px solid rgba(255,255,255,.15)}
+      .tc-ghost:hover{border-color:rgba(255,255,255,.28)}
+      .tc-wa{background:#25D366; color:#071508}
+      .tc-preview{min-height:260px; display:grid; place-items:center; background:var(--card2); border:1px solid rgba(255,255,255,.06); border-radius:16px}
+    </style>
+
+    <!-- Backdrop -->
+    <div id="tcBackdrop" class="tc-backdrop"></div>
+
+    <!-- Modal -->
+    <div id="tcBuy" class="tc-modal tc-font" role="dialog" aria-modal="true" aria-labelledby="tcTitle">
+      <div class="tc-card">
+        <!-- Top -->
+        <div class="tc-top">
+          <span class="tc-badge">🔥 Limited Time Offer — Save Rp 100.000!</span>
+          <button id="tcClose" class="tc-x">✕</button>
+        </div>
+
+        <!-- Content -->
+        <div class="tc-grid">
+          <!-- Left -->
+          <div>
+            <div class="tc-title" id="tcTitle">Toolq Conten</div>
+            <div class="tc-sub">Everything you need to create amazing content</div>
+
+            <div class="tc-price">
+              <span class="tc-old">Rp 300.000</span>
+              <span class="tc-new">Rp 200.000</span>
+            </div>
+            <div class="tc-note">One-time payment · ✅ Save Rp 100.000!</div>
+
+            <ul class="tc-list">
+              <li class="tc-li"><span class="tc-dot"></span><span>Unlimited Video Generation — tanpa batas</span></li>
+              <li class="tc-li"><span class="tc-dot"></span><span>Storyboard Creator profesional</span></li>
+              <li class="tc-li"><span class="tc-dot"></span><span>Filmmaker with Veo 3 (advanced tools)</span></li>
+              <li class="tc-li"><span class="tc-dot"></span><span>Voice Over Generator multi-bahasa</span></li>
+              <li class="tc-li"><span class="tc-dot"></span><span>Microstock Generator (gambar & grafis HQ)</span></li>
+              <li class="tc-li"><span class="tc-dot"></span><span>Commercial License • 24/7 Access • Priority Support</span></li>
+            </ul>
+
+            <div class="tc-cta">
+              <a class="tc-btn tc-primary" href="https://wa.me/6281244442114?text=Halo%2C%20saya%20ingin%20membeli%20Toolq%20Conten" target="_blank" rel="noopener">Beli via WhatsApp</a>
+              <a class="tc-btn tc-ghost" href="https://lynk.id/ftypunya" target="_blank" rel="noopener">Beli via Lynk.id</a>
+              <a class="tc-btn tc-wa" href="https://wa.me/6281244442114" target="_blank" rel="noopener">Chat WhatsApp</a>
+            </div>
+          </div>
+
+          <!-- Right -->
+          <div class="tc-preview">
+             <iframe src="https://lynk.id/ftypunya" frameborder="0"
+                style="width:100%; height:100%; border-radius:12px; overflow:hidden">
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tcModal = document.getElementById('tcBuy');
+      const tcBackdrop = document.getElementById('tcBackdrop');
+      const tcClose = document.getElementById('tcClose');
+
+      function tcOpen(){ tcModal.classList.add('tc-open'); tcBackdrop.classList.add('tc-open'); }
+      function tcHide(){ tcModal.classList.remove('tc-open'); tcBackdrop.classList.remove('tc-open'); }
+
+      tcClose.addEventListener('click', tcHide);
+      tcBackdrop.addEventListener('click', tcHide);
+      window.addEventListener('keydown', e => { if(e.key==='Escape') tcHide(); });
+
+      // The button is in React, so we need to wait for it to be rendered.
+      // A simple interval is a good way to handle this.
+      const findBuyButton = () => {
+        const buyBtn = document.getElementById('buyBtn');
+        if(buyBtn){
+          buyBtn.addEventListener('click', e => {
+            e.preventDefault();
+            tcOpen();
+          });
+          return true; // Button found and listener attached
+        }
+        return false; // Button not found yet
+      };
+      
+      // Try to find the button every 100ms for a few seconds.
+      if (!findBuyButton()) {
+        const interval = setInterval(() => {
+          if (findBuyButton()) {
+            clearInterval(interval);
+          }
+        }, 100);
+        // Stop trying after 5 seconds to avoid an infinite loop
+        setTimeout(() => clearInterval(interval), 5000);
+      }
+    </script>
+    <!-- ===== END POP SCREEN ===== -->
+  </body>
+</html>
